@@ -4,7 +4,7 @@ import datetime as dt
 import tkinter as tk
 import tkinter.font as font
 from tkinter import ttk
-from rewapplication import nextEmptyCell, sumRow
+from rewapplication import nextEmptyCell
 from windows import set_dpi_awareness
 
 set_dpi_awareness()
@@ -23,8 +23,8 @@ class TreatTracker(tk.Tk):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
         
-        OpeningFrame(self).grid(row=0, column=0, sticky="nsew")
-        
+        frame = OpeningFrame(container)
+        frame.grid(row=0, column=0, sticky="nsew")
 
 
 class OpeningFrame(ttk.Frame):
@@ -52,8 +52,13 @@ class OpeningFrame(ttk.Frame):
         yes_button.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
         no_button.grid(row=1, column=1, sticky="nsew", padx=5, pady=5)
         quit_button.grid(row=2, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
-        
-
+    
+    def sumRow(self, ws):
+        row_values = [cell.value if cell.value is not None else 0 for cell in ws[2]]
+        row_sum = sum(row_values)
+      
+        return row_sum
+    
     def yesButton(self):  
         # Find the next empty cell
         next_reward_cell = nextEmptyCell(self.ws1, 2, 1)    
@@ -63,11 +68,9 @@ class OpeningFrame(ttk.Frame):
         wb.save("Rewards1.xlsx")
         
         # Sum the rewards row
-        sum_row = sumRow(self.ws1)
+        sum_row = self.sumRow(self.ws1)
         print(sum_row)
-        
-        
-    
+
     def noButton(self):
         #Find the empty cell
         next_reward_cell = nextEmptyCell(self.ws1, 2, 1)
@@ -93,8 +96,94 @@ class OpeningFrame(ttk.Frame):
         rewb.save("money_rewards.xlsx")
         
         # Sum the rewards row
-        sum_row = sumRow(self.ws1)
+        sum_row = self.sumRow(self.ws1)
         print(sum_row)
+
+
+class NoFrame(ttk.Frame):
+    def __init__(self, container, *kwargs):
+        super().__init__(container, *kwargs)
+
+        self.reward_amount = 0
+
+        # Identify the active worksheet
+        self.ws1 = wb.active    
+
+        self.grid(sticky="nsew")
+
+        # Row and column configurations
+        self.columnconfigure((0,1), weight=1)
+        self.rowconfigure((0,1,2), weight=1)
+
+        # Widgets
+        congrats = ttk.Label(self,text=f"Today, you earned ${self.reward_amount} " 
+                             "toward your goal!\n Congratulations!!!")
+        new_total = ttk.Label(self, text=f"You have earned a total of ${self.sumRow(self.ws1)} toward your goal")
+        graph_button = ttk.Button(self, command=self.showGraph, text="See your progress!")
+        excel_button = ttk.Button(self, command=self.showExcel, text="See spreadsheet")
+        quit_button = ttk.Button(self, command=container.destroy, text="Quit")
+
+        congrats.grid(row=0, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+        new_total.grid(row=1, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+        graph_button.grid(row=2, column=0, sticky="nsew", padx=5, pady=5)
+        excel_button.grid(row=2, column=1, sticky="nsew", padx=5, pady=5)
+        quit_button.grid(row=3, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+
+    def sumRow(self, ws):
+        row_values = [cell.value if cell.value is not None else 0 for cell in ws[2]]
+        row_sum = sum(row_values)
+      
+        return row_sum
+    
+    def showGraph(self):
+        pass
+
+    def showExcel(self):
+        pass
+
+class YesFrame(ttk.Frame):
+    def __init__(self, container, *kwargs):
+        super().__init__(container, *kwargs)
+
+        self.reward_amount = 0
+
+        # Identify the active worksheet
+        self.ws1 = wb.active    
+
+        self.grid(sticky="nsew")
+
+        # Row and column configurations
+        self.columnconfigure((0,1), weight=1)
+        self.rowconfigure((0,1,2), weight=1)
+
+        # Widgets
+        sorry = ttk.Label(self,text=f"Sorry, no reward for you today! Try again tomorrow.")
+        new_total = ttk.Label(self, text=f"You have earned a total of ${self.sumRow(self.ws1)} toward your goal")
+        graph_button = ttk.Button(self, command=self.showGraph, text="See your progress!")
+        excel_button = ttk.Button(self, command=self.showExcel, text="See spreadsheet")
+        quit_button = ttk.Button(self, command=container.destroy, text="Quit")
+
+        sorry.grid(row=0, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+        new_total.grid(row=1, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+        graph_button.grid(row=2, column=0, sticky="nsew", padx=5, pady=5)
+        excel_button.grid(row=2, column=1, sticky="nsew", padx=5, pady=5)
+        quit_button.grid(row=3, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+
+    def sumRow(self, ws):
+        row_values = [cell.value if cell.value is not None else 0 for cell in ws[2]]
+        row_sum = sum(row_values)
+      
+        return row_sum
+    
+    def showGraph(self):
+        pass
+
+    def showExcel(self):
+        pass
+
+    
+    
+  
         
 
 # Load or create the workbook
