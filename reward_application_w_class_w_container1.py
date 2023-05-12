@@ -181,11 +181,6 @@ class YesFrame(ttk.Frame):
     def showExcel(self):
         pass
 
-    
-    
-  
-        
-
 # Load or create the workbook
 try:
     wb = op.load_workbook("Rewards1.xlsx")
