@@ -17,8 +17,8 @@ class TreatTracker(tk.Tk):
     
         self.title("Treat Tracker")
 
-        # container = ttk.Frame(self)
-        # container.grid(padx=40, pady=40, sticky="nsew")
+        container = ttk.Frame(self)
+        container.grid(padx=40, pady=40, sticky="nsew")
         
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)

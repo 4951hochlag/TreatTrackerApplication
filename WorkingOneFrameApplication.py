@@ -21,8 +21,6 @@ class TreatTracker(tk.Tk):
         self.rowconfigure(0, weight=1)
         
         OpeningFrame(self).grid()
-    
-    
         
 
 
