@@ -38,10 +38,10 @@ class TreatTracker(tk.Tk):
         self.frames[NoFrame] = no_frame
         
 
-        if OpeningFrame in self.frames:
-            print("Key exists")
-        else:
-            print("Key doesn't exist")
+        # if OpeningFrame in self.frames:
+        #     print("Key exists")
+        # else:
+        #     print("Key doesn't exist")
 
     def show_frame(self, container):
         frame = self.frames[container]
@@ -123,8 +123,7 @@ class NoFrame(ttk.Frame):
 
         self.grid(sticky="nsew")
 
-        self.reward_amount = 0
-        # self.reward_amount = self.getReward()
+        self.reward_amount = self.getReward()
 
         # Row and column configurations
         self.columnconfigure((0,1), weight=1)
