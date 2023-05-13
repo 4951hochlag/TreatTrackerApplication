@@ -23,9 +23,14 @@ class TreatTracker(tk.Tk):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
         
-        frame = OpeningFrame(container)
-        frame.grid(row=0, column=0, sticky="nsew")
+        no_frame = NoFrame(container)
+        no_frame.grid(row=0, column=0, sticky="nsew")
 
+        yes_frame = YesFrame(container)
+        yes_frame.grid(row=0, column=0, sticky="nsew")
+        
+        opening_frame = OpeningFrame(container)
+        opening_frame.grid(row=0, column=0, sticky="nsew")
 
 class OpeningFrame(ttk.Frame):
     def __init__(self, container, *kwargs):
@@ -95,16 +100,16 @@ class OpeningFrame(ttk.Frame):
         wb.save("Rewards1.xlsx")
         rewb.save("money_rewards.xlsx")
         
-        # Sum the rewards row
-        sum_row = self.sumRow(self.ws1)
-        print(sum_row)
+        return reward_amount
 
 
 class NoFrame(ttk.Frame):
     def __init__(self, container, *kwargs):
         super().__init__(container, *kwargs)
 
-        self.reward_amount = 0
+        opening_frame = OpeningFrame()
+        
+        self.reward_amount = opening_frame.noButton()
 
         # Identify the active worksheet
         self.ws1 = wb.active    
