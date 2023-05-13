@@ -24,6 +24,9 @@ class TreatTracker(tk.Tk):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
         
+        opening_frame = OpeningFrame(container, self)
+        opening_frame.grid(row=0, column=0, sticky="nsew")
+        
         yes_frame = YesFrame(container)
         yes_frame.grid(row=0, column=0, sticky="nsew")
         
@@ -33,9 +36,10 @@ class TreatTracker(tk.Tk):
         opening_frame = OpeningFrame(container, self)
         opening_frame.grid(row=0, column=0, sticky="nsew")
         
+        self.frames[OpeningFrame] = opening_frame
         self.frames[YesFrame] = yes_frame
         self.frames[NoFrame] = no_frame
-        self.frames[OpeningFrame] = opening_frame
+        
 
         if OpeningFrame in self.frames:
             print("Key exists")
