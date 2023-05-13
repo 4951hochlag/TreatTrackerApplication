@@ -16,6 +16,7 @@ class TreatTracker(tk.Tk):
         super().__init__(*args, **kwargs)
     
         self.title("Treat Tracker")
+        self.frames = dict()
 
         container = ttk.Frame(self)
         container.grid(padx=40, pady=40, sticky="nsew")
@@ -23,17 +24,26 @@ class TreatTracker(tk.Tk):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
         
-        no_frame = NoFrame(container)
-        no_frame.grid(row=0, column=0, sticky="nsew")
-
         yes_frame = YesFrame(container)
         yes_frame.grid(row=0, column=0, sticky="nsew")
         
-        opening_frame = OpeningFrame(container)
+        no_frame = NoFrame(container)
+        no_frame.grid(row=0, column=0, sticky="nsew")
+       
+        opening_frame = OpeningFrame(container, self)
         opening_frame.grid(row=0, column=0, sticky="nsew")
+        
+        self.frames[YesFrame] = yes_frame
+        self.frames[NoFrame] = no_frame
+        self.frames[OpeningFrame] = opening_frame
+
+    def show_frame(self, container):
+        frame = self.frames[container]
+        frame.tkraise()
+        
 
 class OpeningFrame(ttk.Frame):
-    def __init__(self, container, *kwargs):
+    def __init__(self, container, controller, *kwargs):
         super().__init__(container, *kwargs)
 
         # Identify the active worksheet
@@ -47,11 +57,11 @@ class OpeningFrame(ttk.Frame):
 
         # Widgets
         question = ttk.Label(self, text="Did you eat any treats today?")
-        yes_button = ttk.Button(self, command=self.yesButton, text="Yes")
-        no_button = ttk.Button(self, command=self.noButton, text="No")
+        yes_button = ttk.Button(self, command= lambda: [controller.show_frame(YesFrame), self.yesButton()], text="Yes")
+        no_button = ttk.Button(self, command=lambda: [controller.show_frame(NoFrame), self.noButton()], text="No")
         quit_button = ttk.Button(self, command=container.destroy, text="Quit")
         
-
+# command= lambda:[display_msg(), show_list()])
         # Layout
         question.grid(row=0, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
         yes_button.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
@@ -107,14 +117,13 @@ class NoFrame(ttk.Frame):
     def __init__(self, container, *kwargs):
         super().__init__(container, *kwargs)
 
-        opening_frame = OpeningFrame()
-        
-        self.reward_amount = opening_frame.noButton()
-
         # Identify the active worksheet
         self.ws1 = wb.active    
 
         self.grid(sticky="nsew")
+
+        # Temporarily here (would like this to be equal to the method noButton in OpeningFrame)
+        self.reward_amount = 0
 
         # Row and column configurations
         self.columnconfigure((0,1), weight=1)
