@@ -27,7 +27,7 @@ class TreatTracker(tk.Tk):
         yes_frame = YesFrame(container)
         yes_frame.grid(row=0, column=0, sticky="nsew")
         
-        no_frame = NoFrame(container)
+        no_frame = NoFrame(container, self)
         no_frame.grid(row=0, column=0, sticky="nsew")
        
         opening_frame = OpeningFrame(container, self)
@@ -37,10 +37,18 @@ class TreatTracker(tk.Tk):
         self.frames[NoFrame] = no_frame
         self.frames[OpeningFrame] = opening_frame
 
+        if OpeningFrame in self.frames:
+            print("Key exists")
+        else:
+            print("Key doesn't exist")
+
     def show_frame(self, container):
         frame = self.frames[container]
         frame.tkraise()
-        
+    
+    def get_frame(self, page_class):     
+        return self.frames[page_class]
+     
 
 class OpeningFrame(ttk.Frame):
     def __init__(self, container, controller, *kwargs):
@@ -61,18 +69,11 @@ class OpeningFrame(ttk.Frame):
         no_button = ttk.Button(self, command=lambda: [controller.show_frame(NoFrame), self.noButton()], text="No")
         quit_button = ttk.Button(self, command=container.destroy, text="Quit")
         
-# command= lambda:[display_msg(), show_list()])
         # Layout
         question.grid(row=0, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
         yes_button.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
         no_button.grid(row=1, column=1, sticky="nsew", padx=5, pady=5)
         quit_button.grid(row=2, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
-    
-    def sumRow(self, ws):
-        row_values = [cell.value if cell.value is not None else 0 for cell in ws[2]]
-        row_sum = sum(row_values)
-      
-        return row_sum
     
     def yesButton(self):  
         # Find the next empty cell
@@ -82,9 +83,6 @@ class OpeningFrame(ttk.Frame):
         # Save the relevant excel file
         wb.save("Rewards1.xlsx")
         
-        # Sum the rewards row
-        sum_row = self.sumRow(self.ws1)
-        print(sum_row)
 
     def noButton(self):
         #Find the empty cell
@@ -114,16 +112,17 @@ class OpeningFrame(ttk.Frame):
 
 
 class NoFrame(ttk.Frame):
-    def __init__(self, container, *kwargs):
+    def __init__(self, container, controller, *kwargs):
         super().__init__(container, *kwargs)
 
+        self.controller = controller
+        
         # Identify the active worksheet
         self.ws1 = wb.active    
 
         self.grid(sticky="nsew")
 
-        # Temporarily here (would like this to be equal to the method noButton in OpeningFrame)
-        self.reward_amount = 0
+        self.reward_amount = self.getReward()
 
         # Row and column configurations
         self.columnconfigure((0,1), weight=1)
@@ -148,6 +147,12 @@ class NoFrame(ttk.Frame):
         row_sum = sum(row_values)
       
         return row_sum
+    
+    def getReward(self):
+        frame = self.controller.get_frame(OpeningFrame)
+        reward = frame.noButton()
+
+        return reward  
     
     def showGraph(self):
         pass
