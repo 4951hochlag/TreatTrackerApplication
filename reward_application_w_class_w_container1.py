@@ -123,7 +123,8 @@ class NoFrame(ttk.Frame):
 
         self.grid(sticky="nsew")
 
-        self.reward_amount = self.getReward()
+        self.reward_amount = 0
+        # self.reward_amount = self.getReward()
 
         # Row and column configurations
         self.columnconfigure((0,1), weight=1)
