@@ -32,9 +32,6 @@ class TreatTracker(tk.Tk):
         
         no_frame = NoFrame(container, self)
         no_frame.grid(row=0, column=0, sticky="nsew")
-       
-        opening_frame = OpeningFrame(container, self)
-        opening_frame.grid(row=0, column=0, sticky="nsew")
         
         self.frames[OpeningFrame] = opening_frame
         self.frames[YesFrame] = yes_frame
