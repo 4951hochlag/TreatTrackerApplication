@@ -28,23 +28,11 @@ class TreatTracker(tk.Tk):
         opening_frame.grid(row=0, column=0, sticky="nsew")
         self.frames[OpeningFrame] = opening_frame
 
-        yes_frame = YesFrame(container)
-        yes_frame.grid(row=0, column=0, sticky="nsew")
-        self.frames[YesFrame] = yes_frame
-
-        no_frame = NoFrame(container, self)
-        no_frame.grid(row=0, column=0, sticky="nsew")
-        self.frames[NoFrame] = no_frame
-
-        if OpeningFrame in self.frames:
-            print("Key exists")
-        else:
-            print("Key doesn't exist")
-
-        self.show_frame(OpeningFrame)
-
-
     def show_frame(self, container):
+        if container not in self.frames:
+            frame = container(self, self)
+            frame.grid(row=0, column=0, sticky="nsew")
+            self.frames[container] = frame
         frame = self.frames[container]
         frame.tkraise()
     
