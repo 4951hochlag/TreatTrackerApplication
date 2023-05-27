@@ -36,11 +36,6 @@ class TreatTracker(tk.Tk):
         no_frame.grid(row=0, column=0, sticky="nsew")
         self.frames[NoFrame] = no_frame
 
-        if OpeningFrame in self.frames:
-            print("Key exists")
-        else:
-            print("Key doesn't exist")
-
         self.show_frame(OpeningFrame)
 
 
@@ -67,7 +62,7 @@ class OpeningFrame(ttk.Frame):
         # Widgets
         question = ttk.Label(self, text="Did you eat any treats today?")
         yes_button = ttk.Button(self, command= lambda: [controller.show_frame(YesFrame), self.yesButton()], text="Yes")
-        no_button = ttk.Button(self, command=lambda: controller.show_frame(NoFrame), text="No")
+        no_button = ttk.Button(self, command=lambda: [controller.show_frame(NoFrame), self.noButton()], text="No")
         quit_button = ttk.Button(self, command=container.destroy, text="Quit")
 
         # Layout
@@ -94,7 +89,7 @@ class OpeningFrame(ttk.Frame):
         ws2 = rewb.active   
         # Choose a reward value and erase it from the rewards excel document
         while True:
-            row_number = r.randint(1, 41)
+            row_number = r.randint(1, 265)
             cell = f"A{row_number}"
             reward_amount = ws2[f"{cell}"].value
             if reward_amount is not None:
@@ -128,7 +123,7 @@ class NoFrame(ttk.Frame):
         self.rowconfigure((0,1,2), weight=1)
 
         # Widgets
-        congrats = ttk.Label(self,text=f"Today, you earned ${self.getReward()} " 
+        congrats = ttk.Label(self,text=f"Today, you earned $ " 
                              "toward your goal!\n Congratulations!!!")
         new_total = ttk.Label(self, text=f"You have earned a total of ${self.sumRow(self.ws1)} toward your goal")
         graph_button = ttk.Button(self, command=self.showGraph, text="See your progress!")
