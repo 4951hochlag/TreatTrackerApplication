@@ -123,7 +123,7 @@ class NoFrame(ttk.Frame):
         self.rowconfigure((0,1,2), weight=1)
 
         # Widgets
-        congrats = ttk.Label(self,text=f"Today, you earned $ " 
+        congrats = ttk.Label(self,text=f"Today, you earned $____ " # Here I want to be able to access the reward amount generated when the noButton method runs
                              "toward your goal!\n Congratulations!!!")
         new_total = ttk.Label(self, text=f"You have earned a total of ${self.sumRow(self.ws1)} toward your goal")
         graph_button = ttk.Button(self, command=self.showGraph, text="See your progress!")
